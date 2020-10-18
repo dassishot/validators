@@ -10,7 +10,21 @@ const knex = config(knexfile)(require('knex'))
 const getError = error => R.pipe(R.prop('inner'), R.map(({ path, value, message }) => ({ path, value, message })))(error)
 const getUnique = value => knex('users').where({ email: value }).first('id')
 
-test('Deve retornar token ao efetuar login', async () => {
+test('Não deve retornar error pois nao existe fn', async () => {
+
+  const schema = yup.object().shape({ email: yup.string().fnc({ message: 'already registered' }).required() })
+
+  const errors = await schema
+    .validate({ email: 'dassishot@gmail.com' }, { abortEarly: false, recursiva: false })
+    .catch(getError)
+
+  const isArray = Array.isArray(errors)
+
+  expect(isArray).toBe(false)
+})
+
+
+test('Deve retornar true caso exista email a base de dados', async () => {
 
   const schema = yup.object().shape({
     email: yup.string().fnc({ message: 'already registered', fn: getUnique }).required()
@@ -20,17 +34,11 @@ test('Deve retornar token ao efetuar login', async () => {
     .validate({ email: 'dassishot@gmail.com' }, { abortEarly: false })
     .catch(getError)
 
-  // const ty = R.tryCatch(R.pipe(validate(schema), R.andThen(item => console.log('ITEM', item))), getError)({ email: 'dasssishot@gmail.com' })
+  const { path, value, message } = R.head(errors)
 
-  console.log(errors)
+  expect(errors).toEqual(expect.arrayContaining(errors))
 
-  // const test = await schema
-  //   .isValid({ email: 'dasssishot@gmail.com' })
-
-
-
-  const status = true
-  const body = false
-  expect(status).toBe(true)
-  expect(body).toBe(false)
+  expect(path).toBe('email')
+  expect(value).toBe('dassishot@gmail.com')
+  expect(message).toBe('already registered')
 })
