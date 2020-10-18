@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --env=node",
+    "secure-mode": "jest --watch --verbose  --runInBand --detectOpenHandles --env=node",
+    "lint": "eslint src/** test/** --fix"
   },
   "repository": {
     "type": "git",
@@ -18,10 +20,14 @@
   },
   "homepage": "https://github.com/dassishot/validators#readme",
   "dependencies": {
-    "knex": "^0.21.6",
     "yup": "^0.29.3"
   },
   "devDependencies": {
-    "eslint": "^7.11.0"
+    "dotenv": "^8.2.0",
+    "ramda": "^0.27.1",
+    "knex": "^0.21.6",
+    "pg": "^8.4.1",
+    "eslint": "^7.11.0",
+    "jest": "^26.5.3"
   }
 }
