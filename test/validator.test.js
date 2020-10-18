@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 const R = require('ramda')
-const yup = require('../src/index')
+const yup = require('../index')
 
 const knexfile = require('../knexfile')
 const config = ({ development }) => knex => knex(development)
