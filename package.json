@@ -1,0 +1,27 @@
+{
+  "name": "validators",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dassishot/validators.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dassishot/validators/issues"
+  },
+  "homepage": "https://github.com/dassishot/validators#readme",
+  "dependencies": {
+    "knex": "^0.21.6",
+    "yup": "^0.29.3"
+  },
+  "devDependencies": {
+    "eslint": "^7.11.0"
+  }
+}
