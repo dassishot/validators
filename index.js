@@ -1,7 +1,4 @@
-const yup = require('yup')
+const yup = require('./src/extends')
+const { validate, getErrors } = require('./src/middleware')
 
-yup.addMethod(yup.string, 'fnc', function ({ message = 'default message', fn = value => false }) {
-  return this.test('fnc', message, async value => (value && !await fn(value)) ? true : false)
-})
-
-module.exports = yup
+module.exports = { yup, validate, getErrors }

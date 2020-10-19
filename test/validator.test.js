@@ -1,13 +1,13 @@
 require('dotenv').config()
 
 const R = require('ramda')
-const yup = require('../index')
+const yup = require('../src/extends')
+const { getErrors } = require('../src/middleware')
 
 const knexfile = require('../knexfile')
 const config = ({ development }) => knex => knex(development)
 const knex = config(knexfile)(require('knex'))
 
-const getError = error => R.pipe(R.prop('inner'), R.map(({ path, value, message }) => ({ path, value, message })))(error)
 const getUnique = value => knex('users').where({ email: value }).first('id')
 
 test('Não deve retornar error pois nao existe fn', async () => {
@@ -15,8 +15,8 @@ test('Não deve retornar error pois nao existe fn', async () => {
   const schema = yup.object().shape({ email: yup.string().fnc({ message: 'already registered' }).required() })
 
   const errors = await schema
-    .validate({ email: 'dassishot@gmail.com' }, { abortEarly: false, recursiva: false })
-    .catch(getError)
+    .validate({ email: 'dassishot@gmail.com' }, { abortEarly: false })
+    .catch(getErrors)
 
   const isArray = Array.isArray(errors)
 
@@ -32,7 +32,7 @@ test('Deve retornar true caso exista email a base de dados', async () => {
 
   const errors = await schema
     .validate({ email: 'dassishot@gmail.com' }, { abortEarly: false })
-    .catch(getError)
+    .catch(getErrors)
 
   const { path, value, message } = R.head(errors)
 
