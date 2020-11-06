@@ -42,3 +42,19 @@ test('Deve retornar true caso exista email a base de dados', async () => {
   expect(value).toBe('dassishot@gmail.com')
   expect(message).toBe('already registered')
 })
+
+test('Deve retornar true caso não exista email a base de dados', async () => {
+
+  const schema = yup.object().shape({ email: yup.string().fnc({ message: 'already registered', fn: getUnique }).required() })
+
+  const errors = await schema
+    .validate({ email: 'dassishotaaaaaagmail.com' }, { abortEarly: false })
+    .catch(getErrors)
+
+  console.log(errors)
+
+
+  const isArray = Array.isArray(errors)
+
+  expect(isArray).toBe(false)
+})
